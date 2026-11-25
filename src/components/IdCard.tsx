@@ -49,7 +49,7 @@ export default function IdCard({ name, role, idNumber, location, initials, strap
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const s = {
-      angle: reduce ? 0 : 0.45, // swing angle (rad), pivot at top of strap
+      angle: reduce ? 0 : 0.16, // swing angle (rad), pivot at top of strap
       vel: 0,
       drop: reduce ? 0 : -(STRAP + CARD_H + 120), // vertical drop-in offset
       dropVel: 0,
@@ -132,10 +132,12 @@ export default function IdCard({ name, role, idNumber, location, initials, strap
       if (now >= startAt) {
         const steps = 4;
         const h = dt / steps;
+        // gentle never-ending sway (about ±3°) so the card keeps moving a little
+        const sway = reduce ? 0 : 0.05 * Math.sin((now - startAt) / 950);
         for (let i = 0; i < steps; i++) {
           if (!s.dragging) {
-            // pendulum with damping
-            s.vel += (-18 * Math.sin(s.angle) - 1.4 * s.vel) * h;
+            // pendulum with damping, pulled toward the sway angle
+            s.vel += (-18 * Math.sin(s.angle - sway) - 1.4 * s.vel) * h;
             s.angle += s.vel * h;
             // strap stretch springs back
             s.stretchVel += (-260 * s.stretch - 16 * s.stretchVel) * h;

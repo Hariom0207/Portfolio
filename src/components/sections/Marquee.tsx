@@ -52,19 +52,22 @@ export default function Marquee() {
   }, []);
 
   return (
-    <div className="relative z-10 -mx-[3%] w-[106%] -rotate-1 overflow-hidden bg-ink py-5 text-white shadow-[0_20px_40px_-20px_rgba(0,0,0,.4)]">
+    // outer wrapper clips the tilted strip so it never causes sideways scrolling
+    <div className="relative z-10 overflow-hidden py-4">
+    <div className="-mx-[3%] w-[106%] -rotate-1 overflow-hidden bg-panel py-4 text-white shadow-[0_20px_40px_-20px_rgba(0,0,0,.4)] sm:py-5">
       <div ref={trackRef} className="flex w-max will-change-transform">
         {items.map((s, i) => (
           <span
             key={i}
             aria-hidden={i >= marquee.length}
-            className="flex items-center gap-10 pr-10 font-display text-3xl uppercase tracking-wide transition-colors hover:text-accent-soft sm:text-4xl"
+            className="flex items-center gap-6 pr-6 font-display text-2xl uppercase tracking-wide transition-colors hover:text-accent-soft sm:gap-10 sm:pr-10 sm:text-4xl"
           >
             {s}
             <span className="text-accent-soft">✦</span>
           </span>
         ))}
       </div>
+    </div>
     </div>
   );
 }

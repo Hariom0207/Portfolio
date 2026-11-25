@@ -1,5 +1,7 @@
+import BackToTop from "@/components/BackToTop";
 import Nav from "@/components/Nav";
 import { ScrollProgress } from "@/components/ScrollEffects";
+import SparkleCursor from "@/components/SparkleCursor";
 import About from "@/components/sections/About";
 import Contact from "@/components/sections/Contact";
 import Experience from "@/components/sections/Experience";
@@ -11,6 +13,7 @@ import Services from "@/components/sections/Services";
 export default function Home() {
   return (
     <>
+      <SparkleCursor />
       <ScrollProgress />
       <Nav />
       <main>
@@ -22,6 +25,7 @@ export default function Home() {
         <Experience />
         <Contact />
       </main>
+      <BackToTop />
     </>
   );
 }

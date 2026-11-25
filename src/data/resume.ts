@@ -10,10 +10,11 @@ export const profile = {
   location: "Jhabua, Madhya Pradesh, India",
   shortLocation: "Jhabua, MP",
   email: "hari273om@gmail.com",
-  github: "https://github.com/Hariom0207",
+  linkedin: "https://www.linkedin.com/in/hariom-ray-ba239b34a/",
   idNumber: "HR-0207",
-  // Photo used on the ID card and in the About section (file lives in /public).
-  photo: "/hariom.jpg" as string | null,
+  // Photos (files live in /public).
+  photo: "/hariom.jpg" as string | null, // ID card in the hero
+  portrait: "/hariom-portrait.png", // About section + Let's talk section
   intro:
     "I build responsive, maintainable web apps with React.js and the MERN stack — two years shipping live projects in a team at Black Hat Bucks Tech.",
   summary: [

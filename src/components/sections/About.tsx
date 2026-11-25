@@ -14,14 +14,7 @@ export default function About() {
         <div className="mt-14 grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
           {/* Photo flips in as you scroll, then stays in view while the text scrolls */}
           <div className="lg:sticky lg:top-28 lg:self-start">
-            {profile.photo && (
-              <FlipPhoto
-                src={profile.photo}
-                alt={profile.name}
-                initials={profile.initials}
-                badges={["2+ yrs · MERN", "Open to work"]}
-              />
-            )}
+            <FlipPhoto src={profile.portrait} alt={profile.name} initials={profile.initials} />
           </div>
 
           <div>

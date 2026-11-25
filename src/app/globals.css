@@ -1,17 +1,46 @@
 @import "tailwindcss";
 
-@theme {
-  --color-bg: #f4f4f1;
-  --color-surface: #ffffff;
-  --color-ink: #222225;
-  --color-muted: #75757c;
-  --color-line: #e2e2de;
-  --color-accent: #5e67e6;
-  --color-accent-soft: #a3a9ff;
-  --color-card: #111216;
+/* `dark:` utilities follow the .dark class on <html> (set by ThemeToggle) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Light theme */
+:root {
+  --bg: #f4f4f1;
+  --surface: #ffffff;
+  --ink: #222225;
+  --muted: #75757c;
+  --line: #e2e2de;
+  --accent: #5e67e6;
+  --accent-soft: #a3a9ff;
+  --card: #111216; /* ID card */
+  --panel: #1d1e22; /* dark blocks: skills strip, contact box */
+  color-scheme: light;
+}
+
+/* Dark theme */
+.dark {
+  --bg: #0c0d11;
+  --surface: #14151b;
+  --ink: #ececf1;
+  --muted: #9a9aa8;
+  --line: #262732;
+  --accent: #6d75f2;
+  --accent-soft: #a3a9ff;
+  --card: #1b1c24;
+  --panel: #181922;
+  color-scheme: dark;
 }
 
 @theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-card: var(--card);
+  --color-panel: var(--panel);
   --font-display: var(--font-antonio), "Arial Narrow", sans-serif;
   --font-sans: var(--font-inter), system-ui, sans-serif;
 }
@@ -21,10 +50,17 @@ html {
 }
 
 body {
-  background: var(--color-bg);
-  color: var(--color-ink);
+  background: var(--bg);
+  color: var(--ink);
   font-family: var(--font-sans);
   overflow-x: clip;
+}
+
+/* Theme switch: circular reveal from the toggle button (see ThemeToggle.tsx) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
 }
 
 ::selection {
@@ -69,6 +105,126 @@ body {
   }
 }
 
+/* ---------- Custom cursor (see SparkleCursor.tsx) ---------- */
+/* hide the system arrow on mouse devices; keep the text caret cursor inside form fields */
+.has-custom-cursor,
+.has-custom-cursor * {
+  cursor: none !important;
+}
+.has-custom-cursor input,
+.has-custom-cursor textarea {
+  cursor: text !important;
+}
+.reticle {
+  --spread: 0px;
+  --spin: 45deg;
+}
+.reticle-diamond {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--accent);
+  border-radius: 2px;
+  transform: translate(-50%, -50%) rotate(var(--spin));
+  box-shadow:
+    0 0 10px rgba(94, 103, 230, 0.8),
+    inset 0 0 6px rgba(56, 189, 248, 0.6);
+}
+.reticle-tick {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2px;
+  height: 7px;
+  border-radius: 1px;
+  background: var(--accent);
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.8);
+}
+.reticle-t {
+  transform: translate(-50%, calc(-50% - 15px - var(--spread)));
+}
+.reticle-b {
+  transform: translate(-50%, calc(-50% + 15px + var(--spread)));
+}
+.reticle-l {
+  transform: translate(calc(-50% - 15px - var(--spread)), -50%) rotate(90deg);
+}
+.reticle-r {
+  transform: translate(calc(-50% + 15px + var(--spread)), -50%) rotate(90deg);
+}
+
+/* ---------- Nav (see Nav.tsx) ---------- */
+/* letters roll up one by one on hover / when the tab is active */
+.roll-char > span {
+  transition: transform 0.45s cubic-bezier(0.65, 0, 0.35, 1);
+  transition-delay: calc(var(--i) * 22ms);
+}
+a:hover .roll .roll-char > span,
+.roll[data-active="true"] .roll-char > span {
+  transform: translateY(-100%);
+}
+/* current-section chip text drops in when the section changes */
+.nav-chip-in {
+  animation: chip-in 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes chip-in {
+  from {
+    transform: translateY(-110%);
+    opacity: 0;
+  }
+}
+/* mobile menu */
+.nav-menu-in {
+  animation: menu-in 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  transform-origin: top;
+}
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.97);
+  }
+}
+.nav-item-in {
+  animation: item-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--i) * 45ms);
+}
+@keyframes item-in {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+}
+
+/* ---------- Back to top (see BackToTop.tsx) ---------- */
+.back-to-top {
+  opacity: 0;
+  transform: translateY(20px) scale(0.6);
+  pointer-events: none;
+  transition:
+    opacity 0.4s,
+    transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.back-to-top[data-show="true"] {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+.back-to-top[data-show="true"]:hover {
+  transform: scale(1.08);
+}
+
+/* Rotating text ring around the contact photo */
+.spin-slow {
+  animation: spin-slow 18s linear infinite;
+}
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* Spotlight that follows the mouse on <Tilt> cards */
 .tilt {
   transform-style: preserve-3d;
@@ -93,7 +249,14 @@ body {
     transition: none;
     animation: none;
   }
-  .strap-text {
+  .strap-text,
+  .spin-slow,
+  .nav-chip-in,
+  .nav-menu-in,
+  .nav-item-in {
     animation: none;
+  }
+  .roll-char > span {
+    transition: none;
   }
 }

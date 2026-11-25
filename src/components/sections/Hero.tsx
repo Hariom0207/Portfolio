@@ -58,7 +58,7 @@ export default function Hero() {
               <Magnetic>
                 <a
                   href="#work"
-                  className="group inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-medium text-white transition-colors hover:bg-ink"
+                  className="group inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-medium text-white transition-colors hover:bg-ink hover:text-bg"
                 >
                   View my work
                   <span className="transition-transform group-hover:translate-x-1">→</span>
@@ -67,7 +67,7 @@ export default function Hero() {
               <Magnetic>
                 <a
                   href="#contact"
-                  className="inline-flex items-center rounded-full border border-ink/15 px-6 py-3.5 text-sm font-medium transition-colors hover:border-ink hover:bg-ink hover:text-white"
+                  className="inline-flex items-center rounded-full border border-ink/15 px-6 py-3.5 text-sm font-medium transition-colors hover:border-ink hover:bg-ink hover:text-bg"
                 >
                   Get in touch
                 </a>
