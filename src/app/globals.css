@@ -1,26 +1,331 @@
 @import "tailwindcss";
 
+/* `dark:` utilities follow the .dark class on <html> (set by ThemeToggle) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Light theme */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #f4f4f1;
+  --surface: #ffffff;
+  --ink: #222225;
+  --muted: #75757c;
+  --line: #e2e2de;
+  --accent: #5e67e6;
+  --accent-soft: #a3a9ff;
+  --card: #111216; /* ID card */
+  --panel: #1d1e22; /* dark blocks: skills strip, contact box */
+  color-scheme: light;
+}
+
+/* Dark theme */
+.dark {
+  --bg: #0c0d11;
+  --surface: #14151b;
+  --ink: #ececf1;
+  --muted: #9a9aa8;
+  --line: #262732;
+  --accent: #6d75f2;
+  --accent-soft: #a3a9ff;
+  --card: #1b1c24;
+  --panel: #181922;
+  color-scheme: dark;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-card: var(--card);
+  --color-panel: var(--panel);
+  --font-display: var(--font-antonio), "Arial Narrow", sans-serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  overflow-x: clip;
+}
+
+/* Theme switch: circular reveal from the toggle button (see ThemeToggle.tsx) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+/* Scroll reveal (see components/Reveal.tsx) */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition:
+    opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--d, 0ms);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Hero name: letters slide up from a mask */
+.letter {
+  display: inline-block;
+  transform: translateY(105%);
+  animation: letter-up 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: var(--d, 0ms);
+}
+@keyframes letter-up {
+  to {
+    transform: none;
+  }
+}
+
+/* Lanyard strap text scrolls continuously (see IdCard.tsx) */
+.strap-text {
+  animation: strap-scroll 14s linear infinite;
+}
+@keyframes strap-scroll {
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+/* ---------- Custom cursor (see SparkleCursor.tsx) ---------- */
+/* hide the system arrow on mouse devices; keep the text caret cursor inside form fields */
+.has-custom-cursor,
+.has-custom-cursor * {
+  cursor: none !important;
+}
+.has-custom-cursor input,
+.has-custom-cursor textarea {
+  cursor: text !important;
+}
+.reticle {
+  --spread: 0px;
+  --spin: 45deg;
+}
+.reticle-diamond {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--accent);
+  border-radius: 2px;
+  transform: translate(-50%, -50%) rotate(var(--spin));
+  box-shadow:
+    0 0 10px rgba(94, 103, 230, 0.8),
+    inset 0 0 6px rgba(56, 189, 248, 0.6);
+}
+.reticle-tick {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2px;
+  height: 7px;
+  border-radius: 1px;
+  background: var(--accent);
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.8);
+}
+.reticle-t {
+  transform: translate(-50%, calc(-50% - 15px - var(--spread)));
+}
+.reticle-b {
+  transform: translate(-50%, calc(-50% + 15px + var(--spread)));
+}
+.reticle-l {
+  transform: translate(calc(-50% - 15px - var(--spread)), -50%) rotate(90deg);
+}
+.reticle-r {
+  transform: translate(calc(-50% + 15px + var(--spread)), -50%) rotate(90deg);
+}
+
+/* ---------- Nav (see Nav.tsx) ---------- */
+/* letters roll up one by one on hover / when the tab is active */
+.roll-char > span {
+  transition: transform 0.45s cubic-bezier(0.65, 0, 0.35, 1);
+  transition-delay: calc(var(--i) * 22ms);
+}
+a:hover .roll .roll-char > span,
+.roll[data-active="true"] .roll-char > span {
+  transform: translateY(-100%);
+}
+/* current-section chip text drops in when the section changes */
+.nav-chip-in {
+  animation: chip-in 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes chip-in {
+  from {
+    transform: translateY(-110%);
+    opacity: 0;
+  }
+}
+/* mobile menu */
+.nav-menu-in {
+  animation: menu-in 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  transform-origin: top;
+}
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.97);
+  }
+}
+.nav-item-in {
+  animation: item-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--i) * 45ms);
+}
+@keyframes item-in {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+}
+
+/* ---------- Back to top (see BackToTop.tsx) ---------- */
+.back-to-top {
+  opacity: 0;
+  transform: translateY(20px) scale(0.6);
+  pointer-events: none;
+  transition:
+    opacity 0.4s,
+    transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.back-to-top[data-show="true"] {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+.back-to-top[data-show="true"]:hover {
+  transform: scale(1.08);
+}
+
+/* ---------- Loading states ---------- */
+/* shimmering placeholder used by loading.tsx and behind photos until they load */
+.skeleton {
+  background: linear-gradient(
+    100deg,
+    var(--line) 30%,
+    color-mix(in oklab, var(--line), var(--surface) 60%) 50%,
+    var(--line) 70%
+  );
+  background-size: 300% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+@keyframes shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+
+/* intro loader (Preloader.tsx) */
+.preloader {
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 0.9s cubic-bezier(0.76, 0, 0.24, 1);
+  /* failsafe: never cover the page for more than ~6.5s */
+  animation: preloader-failsafe 0s 6.5s forwards;
+}
+.preloader-done {
+  clip-path: inset(0 0 100% 0);
+}
+.skip-preloader .preloader {
+  display: none;
+}
+@keyframes preloader-failsafe {
+  to {
+    visibility: hidden;
+  }
+}
+.preloader-logo {
+  animation: letter-up 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+  transform: translateY(105%);
+}
+.preloader-sub {
+  animation: fade-in 0.8s 0.4s both;
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+/* hero letters wait for the loader to finish */
+.is-loading .letter {
+  animation-play-state: paused;
+}
+
+/* "Coming soon" project panel: slowly moving diagonal stripes */
+.coming-soon-stripes {
+  background-image: repeating-linear-gradient(-45deg, #fff 0 12px, transparent 12px 28px);
+  background-size: 200% 200%;
+  animation: stripes-move 6s linear infinite;
+}
+@keyframes stripes-move {
+  to {
+    background-position: 79px 0;
+  }
+}
+
+/* Rotating text ring around the contact photo */
+.spin-slow {
+  animation: spin-slow 18s linear infinite;
+}
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Spotlight that follows the mouse on <Tilt> cards */
+.tilt {
+  transform-style: preserve-3d;
+}
+.tilt-spot {
+  opacity: 0;
+  transition: opacity 0.3s;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(94, 103, 230, 0.16), transparent 45%);
+}
+.tilt:hover .tilt-spot {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal,
+  .letter {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    animation: none;
+  }
+  .strap-text,
+  .spin-slow,
+  .coming-soon-stripes,
+  .nav-chip-in,
+  .nav-menu-in,
+  .nav-item-in {
+    animation: none;
+  }
+  .roll-char > span {
+    transition: none;
+  }
 }
