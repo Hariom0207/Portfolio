@@ -1,3 +1,4 @@
+import EmptyState from "@/components/EmptyState";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import Tilt from "@/components/Tilt";
@@ -8,6 +9,11 @@ export default function Experience() {
     <section id="experience" className="scroll-mt-24 bg-surface">
       <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6 sm:py-32">
         <SectionHeading eyebrow="Career" title="Experience" />
+        {experience.length === 0 && (
+          <div className="mt-14">
+            <EmptyState title="No experience listed" message="Work history will appear here soon." />
+          </div>
+        )}
 
         <div className="mt-14 border-b border-line">
           {experience.map((e, i) => (
@@ -41,6 +47,11 @@ export default function Experience() {
 
         <div className="mt-24">
           <SectionHeading eyebrow="Learning" title="Education" />
+          {education.length === 0 && (
+            <div className="mt-12">
+              <EmptyState title="No education listed" message="Education details will appear here soon." />
+            </div>
+          )}
           <div className="mt-12 grid gap-4 md:grid-cols-3">
             {education.map((ed, i) => (
               <Reveal key={ed.degree} delay={i * 90}>

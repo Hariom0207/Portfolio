@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { onPreloaderDone } from "@/lib/preloader";
 
 const STRAP = 170; // strap length above the card (px)
 const CARD_W = 280;
@@ -14,6 +15,8 @@ type IdCardProps = {
   initials: string;
   strapText: string;
   photo?: string | null;
+  passLabel?: string;
+  badge?: string;
 };
 
 const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
@@ -31,7 +34,17 @@ function barcode(seed: string) {
   return bars;
 }
 
-export default function IdCard({ name, role, idNumber, location, initials, strapText, photo }: IdCardProps) {
+export default function IdCard({
+  name,
+  role,
+  idNumber,
+  location,
+  initials,
+  strapText,
+  photo,
+  passLabel = "Developer Pass",
+  badge = "Open to work",
+}: IdCardProps) {
   const rigRef = useRef<HTMLDivElement>(null);
   const strapRef = useRef<HTMLDivElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
@@ -64,7 +77,11 @@ export default function IdCard({ name, role, idNumber, location, initials, strap
       grabDist: 0,
       lastMove: 0,
     };
-    const startAt = performance.now() + (reduce ? 0 : 300);
+    // the card drops in shortly after the intro loader has gone
+    let startAt = Infinity;
+    const stopWaiting = onPreloaderDone(() => {
+      startAt = performance.now() + (reduce ? 0 : 300);
+    });
 
     const anchor = () => {
       const r = rig.parentElement!.getBoundingClientRect();
@@ -171,6 +188,7 @@ export default function IdCard({ name, role, idNumber, location, initials, strap
       card.removeEventListener("pointerup", onUp);
       card.removeEventListener("pointercancel", onUp);
       card.removeEventListener("pointerleave", onLeave);
+      stopWaiting();
     };
   }, []);
 
@@ -265,7 +283,7 @@ export default function IdCard({ name, role, idNumber, location, initials, strap
             <div className="absolute inset-x-[18px] top-[34px] flex items-center justify-between text-[10px] font-medium uppercase tracking-[0.16em]">
               <span className="flex items-center gap-2">
                 <span className="size-[7px] rounded-full bg-accent-soft shadow-[0_0_10px_var(--color-accent-soft)]" />
-                Developer Pass
+                {passLabel}
               </span>
               <span className="opacity-60">ID</span>
             </div>
@@ -287,7 +305,7 @@ export default function IdCard({ name, role, idNumber, location, initials, strap
               )}
               <span className="absolute bottom-3 left-3 flex items-center gap-1.5 rounded-full bg-black/45 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.12em] backdrop-blur">
                 <span className="size-1.5 rounded-full bg-emerald-400" />
-                Open to work
+                {badge}
               </span>
             </div>
 

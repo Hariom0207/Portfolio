@@ -215,6 +215,74 @@ a:hover .roll .roll-char > span,
   transform: scale(1.08);
 }
 
+/* ---------- Loading states ---------- */
+/* shimmering placeholder used by loading.tsx and behind photos until they load */
+.skeleton {
+  background: linear-gradient(
+    100deg,
+    var(--line) 30%,
+    color-mix(in oklab, var(--line), var(--surface) 60%) 50%,
+    var(--line) 70%
+  );
+  background-size: 300% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+@keyframes shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+
+/* intro loader (Preloader.tsx) */
+.preloader {
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 0.9s cubic-bezier(0.76, 0, 0.24, 1);
+  /* failsafe: never cover the page for more than ~6.5s */
+  animation: preloader-failsafe 0s 6.5s forwards;
+}
+.preloader-done {
+  clip-path: inset(0 0 100% 0);
+}
+.skip-preloader .preloader {
+  display: none;
+}
+@keyframes preloader-failsafe {
+  to {
+    visibility: hidden;
+  }
+}
+.preloader-logo {
+  animation: letter-up 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+  transform: translateY(105%);
+}
+.preloader-sub {
+  animation: fade-in 0.8s 0.4s both;
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+/* hero letters wait for the loader to finish */
+.is-loading .letter {
+  animation-play-state: paused;
+}
+
+/* "Coming soon" project panel: slowly moving diagonal stripes */
+.coming-soon-stripes {
+  background-image: repeating-linear-gradient(-45deg, #fff 0 12px, transparent 12px 28px);
+  background-size: 200% 200%;
+  animation: stripes-move 6s linear infinite;
+}
+@keyframes stripes-move {
+  to {
+    background-position: 79px 0;
+  }
+}
+
 /* Rotating text ring around the contact photo */
 .spin-slow {
   animation: spin-slow 18s linear infinite;
@@ -251,6 +319,7 @@ a:hover .roll .roll-char > span,
   }
   .strap-text,
   .spin-slow,
+  .coming-soon-stripes,
   .nav-chip-in,
   .nav-menu-in,
   .nav-item-in {

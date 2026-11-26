@@ -1,3 +1,4 @@
+import EmptyState from "@/components/EmptyState";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import Tilt from "@/components/Tilt";
@@ -16,6 +17,11 @@ export default function Services() {
         </Reveal>
       </div>
 
+      {services.length === 0 && (
+        <div className="mt-14">
+          <EmptyState title="Services coming soon" message="Details about what I offer will be added here." />
+        </div>
+      )}
       <div className="mt-14 grid gap-5 sm:grid-cols-2">
         {services.map((s, i) => (
           <Reveal key={s.title} delay={i * 90}>

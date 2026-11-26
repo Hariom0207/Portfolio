@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
+import { onPreloaderDone } from "@/lib/preloader";
 
 // Fades + slides its children up when they scroll into view.
 export default function Reveal({
@@ -26,8 +27,12 @@ export default function Reveal({
       },
       { threshold: 0.15, rootMargin: "0px 0px -40px 0px" },
     );
-    io.observe(el);
-    return () => io.disconnect();
+    // wait until the intro loader is gone so the animation is actually seen
+    const stop = onPreloaderDone(() => io.observe(el));
+    return () => {
+      stop();
+      io.disconnect();
+    };
   }, []);
 
   return (

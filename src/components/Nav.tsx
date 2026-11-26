@@ -82,8 +82,13 @@ export default function Nav() {
     update();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
+    // re-measure the highlight whenever the link list changes size
+    // (e.g. while the header expands back from its collapsed pill)
+    const ro = new ResizeObserver(onScroll);
+    if (listRef.current) ro.observe(listRef.current);
     return () => {
       cancelAnimationFrame(raf);
+      ro.disconnect();
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };

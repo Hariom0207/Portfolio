@@ -25,7 +25,14 @@ export const profile = {
 
 export const stats = [
   { value: 2, suffix: "+", label: "Years of experience" },
-  { value: 3, suffix: "", label: "Featured projects" },
+  {
+    // counts the projects list below automatically
+    get value() {
+      return projects.length;
+    },
+    suffix: "",
+    label: "Featured projects",
+  },
   { value: 5, suffix: "+", label: "Core technologies" },
 ];
 
@@ -103,7 +110,9 @@ export const projects = [
     tags: ["React.js", "Dashboard"],
     url: "https://dashboard.planzo.app",
     linkLabel: "dashboard.planzo.app",
-    theme: "from-[#5e67e6] to-[#2a2f8f]",
+    theme: "from-[#ffffff] to-[#ffe9ec]",
+    logo: { src: "/projects/planzo-logo.png", width: 512, height: 111, className: "w-[72%] max-w-[340px]" },
+    comingSoon: false,
   },
   {
     title: "Black Hat Bucks Tech",
@@ -113,7 +122,21 @@ export const projects = [
     tags: ["Web", "Team project"],
     url: "https://blackbucks.tech",
     linkLabel: "blackbucks.tech",
-    theme: "from-[#1d1e24] to-[#43465a]",
+    theme: "from-[#ffffff] to-[#ffffff]",
+    logo: { src: "/projects/blackbucks-logo.jpg", width: 200, height: 200, className: "h-[88%] w-auto" },
+    comingSoon: false,
+  },
+  {
+    title: "MilkGo",
+    category: "Dairy Management Software",
+    description:
+      "Software for dairy vendors to manage milk-packet distribution to retail shopkeepers, with sales, purchases, customer accounting and analytics in one place.",
+    tags: ["TypeScript", "Full-stack"],
+    url: null as string | null,
+    linkLabel: "Launching soon",
+    theme: "from-[#ffffff] to-[#e3f6fd]",
+    logo: { src: "/projects/milkgo-logo.png", width: 981, height: 271, className: "w-[74%] max-w-[360px]" },
+    comingSoon: true,
   },
   {
     title: "Door-Tak",
@@ -122,8 +145,10 @@ export const projects = [
       "A Shopify-based local e-commerce storefront concept that helps customers in Jhabua discover and order products from local sellers.",
     tags: ["Shopify", "E-commerce"],
     url: null as string | null,
-    linkLabel: "Personal startup project",
+    linkLabel: "Launching soon",
     theme: "from-[#f0a35e] to-[#d1495b]",
+    logo: null,
+    comingSoon: true,
   },
 ];
 

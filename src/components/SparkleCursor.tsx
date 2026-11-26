@@ -229,7 +229,7 @@ export default function SparkleCursor() {
   }, []);
 
   return (
-    <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[100]">
+    <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[300]">
       <canvas ref={canvasRef} className="absolute inset-0 size-full" />
       {/* targeting reticle */}
       <div ref={reticleRef} className="reticle absolute left-0 top-0 size-10 opacity-0 transition-opacity duration-200">

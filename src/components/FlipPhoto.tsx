@@ -94,7 +94,7 @@ export default function FlipPhoto({ src, alt, initials }: { src: string; alt: st
   const face = "absolute inset-0 overflow-hidden rounded-[30px] [backface-visibility:hidden]";
 
   return (
-    <div ref={wrapRef} className="relative mx-auto w-[84%] max-w-[400px] pb-16 pt-4 sm:w-full sm:pb-20">
+    <div ref={wrapRef} className="relative mx-auto w-[84%] max-w-[400px] pb-10 pt-4 sm:w-full sm:pb-12">
       <div className="relative aspect-[4/5] w-full">
         <div
           ref={cardRef}
@@ -103,7 +103,7 @@ export default function FlipPhoto({ src, alt, initials }: { src: string; alt: st
         >
           {/* front: the photo */}
           <div
-            className={`${face} bg-[#e9e9e6] shadow-[0_50px_90px_-40px_rgba(0,0,0,.55)] ring-1 ring-black/5 dark:ring-white/10`}
+            className={`${face} skeleton shadow-[0_50px_90px_-40px_rgba(0,0,0,.55)] ring-1 ring-black/5 dark:ring-white/10`}
           >
             <Image
               src={src}
@@ -114,11 +114,6 @@ export default function FlipPhoto({ src, alt, initials }: { src: string; alt: st
             />
             {/* soft light sweep */}
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-black/25" />
-            {/* pulsing accent dot */}
-            <span className="absolute left-[40%] top-[63%] flex size-5 items-center justify-center">
-              <span className="absolute inline-flex size-full animate-ping rounded-full bg-accent opacity-60" />
-              <span className="relative size-4 rounded-full bg-accent shadow-[0_0_16px_var(--color-accent)] ring-2 ring-white/70" />
-            </span>
           </div>
 
           {/* back: monogram */}
@@ -138,10 +133,10 @@ export default function FlipPhoto({ src, alt, initials }: { src: string; alt: st
         </div>
       </div>
 
-      {/* "Available for work" pill below the photo */}
+      {/* "Available for work" pill, centred on the photo's bottom edge (half on the card, half below) */}
       <div
         ref={pillRef}
-        className="absolute bottom-0 right-0 flex items-center gap-3 rounded-full bg-panel py-1.5 pl-1.5 pr-2 text-white opacity-0 shadow-[0_20px_40px_-15px_rgba(0,0,0,.5)] ring-1 ring-white/10 sm:-right-4"
+        className="absolute inset-x-0 bottom-[14px] z-10 mx-auto flex w-fit items-center gap-3 whitespace-nowrap rounded-full bg-panel py-1.5 pl-1.5 pr-2 text-white opacity-0 shadow-[0_20px_40px_-15px_rgba(0,0,0,.55)] ring-1 ring-white/10 sm:bottom-[18px]"
       >
         <FaceAvatar src={src} alt="" className="size-9 sm:size-10" />
         <span className="text-sm sm:text-base">Available for work</span>
